@@ -34,7 +34,7 @@ export default function JoinRTIScreen({ navigation }) {
 
       <TouchableOpacity 
         style={styles.option}
-        onPress={() => navigation.navigate('CitizenVoice')}
+        // onPress={() => navigation.navigate('CitizenVoice')}
       >
         <Ionicons name="people-circle" size={24} color="#000" />
         <Text style={styles.optionText}>Citizen Voice</Text>

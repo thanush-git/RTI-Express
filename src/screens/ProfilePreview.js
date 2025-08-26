@@ -36,6 +36,7 @@ export default function ProfilePreview({ route }) {
   const [activeTab, setActiveTab] = useState('Pending');
   const [hasPendingContent, setHasPendingContent] = useState(false);
   const [hasApprovedContent, setHasApprovedContent] = useState(false);
+  const [hasSubmittedContent, setHasSubmittedContent] = useState(false);
 
   const fetchProfile = async () => {
     try {
@@ -90,8 +91,9 @@ export default function ProfilePreview({ route }) {
 
   useEffect(() => {
     // Check if tabs have content
-    setHasPendingContent(userPosts && userPosts.length > 0);
-    setHasApprovedContent(recentNews && recentNews.length > 0);
+  setHasPendingContent(userPosts && userPosts.length > 0);
+  setHasApprovedContent(recentNews && recentNews.length > 0);
+  setHasSubmittedContent(userPosts && userPosts.length > 0); // Placeholder, update with actual submitted logic if needed
   }, [userPosts]);
 
   const myPosts = userPosts || [];
@@ -210,6 +212,14 @@ export default function ProfilePreview({ route }) {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity 
+          style={[styles.tabButton, activeTab === 'Submitted' && styles.tabButtonActive]}
+          onPress={() => handleTabPress('Submitted')}
+        >
+          <Text style={[styles.tabText, activeTab === 'Submitted' && styles.tabTextActive]}>
+            Submitted {hasSubmittedContent ? `(${myPosts.length})` : ''}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
           style={[styles.tabButton, activeTab === 'Approved' && styles.tabButtonActive]}
           onPress={() => handleTabPress('Approved')}
         >
@@ -232,6 +242,16 @@ export default function ProfilePreview({ route }) {
       {activeTab === 'Pending' && (
         <FlatList
           data={[...myPosts].reverse()}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          ListEmptyComponent={renderEmptyState}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
+
+      {activeTab === 'Submitted' && (
+        <FlatList
+          data={[...myPosts].reverse()} // Replace with actual submitted data if available
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
           ListEmptyComponent={renderEmptyState}

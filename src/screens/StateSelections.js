@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Image,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -21,34 +22,44 @@ const NewsSourceScreen = ({ navigation }) => {
       alert('Please select a state');
       return;
     }
-    // Proceed with selectedState
     console.log('Selected:', selectedState);
-     navigation.navigate('LanguageScreen', { state: selectedState }); 
+    navigation.navigate('LanguageScreen', { state: selectedState });
   };
+
+  const states = [
+    {
+      name: 'Andhra Pradesh',
+      image: require('../Assets/Rectangle 1457.png'), // <-- Replace with actual image path
+    },
+    {
+      name: 'Telangana',
+      image: require('../Assets/Rectangle 1458.png'), // <-- Replace with actual image path
+    },
+  ];
 
   return (
     <View style={styles.container}>
-      <View style={styles.cardContainer}>
-        {['AP State', 'Telangana'].map((state) => {
-          const isSelected = selectedState === state;
+      <View>
+        {states.map((state) => {
+          const isSelected = selectedState === state.name;
           return (
             <TouchableOpacity
-              key={state}
-              onPress={() => handleSelect(state)}
+              key={state.name}
+              onPress={() => handleSelect(state.name)}
               style={[
-                styles.card,
+                styles.stateCard,
                 isSelected && styles.selectedCard,
               ]}
-              activeOpacity={0.8}
+              activeOpacity={0.9}
             >
-              <View style={styles.imagePlaceholder} />
-              <Text style={styles.cardTitle}>{state}</Text>
-              <TouchableOpacity
-                onPress={() => handleSelect(state)}
-                style={styles.selectButton}
-              >
-                <Text style={styles.selectText}>Select</Text>
-              </TouchableOpacity>
+              <Image
+                source={state.image}
+                style={styles.stateImage}
+                resizeMode="cover"
+              />
+              <View style={styles.overlay}>
+                <Text style={styles.stateText}>{state.name}</Text>
+              </View>
             </TouchableOpacity>
           );
         })}
@@ -62,6 +73,7 @@ const NewsSourceScreen = ({ navigation }) => {
 };
 
 export default NewsSourceScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -69,48 +81,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'space-between',
   },
-  cardContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 10,
-  },
-  card: {
-    width: width * 0.4,
-    borderRadius: 8,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#eee',
-    backgroundColor: '#fafafa',
+  stateCard: {
+    width: '100%',
+    height: 200,
+    marginBottom: 20,
+    borderRadius: 12,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   selectedCard: {
-    borderColor: '#9b5de5',
-    borderWidth: 2,
-    backgroundColor: '#fff',
-  },
-  imagePlaceholder: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 6,
-    marginBottom: 15,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 10,
-    color: '#333',
-  },
-  selectButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 18,
-    borderWidth: 1,
     borderColor: '#007bff',
-    borderRadius: 5,
   },
-  selectText: {
-    color: '#007bff',
+  stateImage: {
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    padding: 12,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    alignItems: 'center',
+  },
+  stateText: {
+    color: '#fff',
+    fontSize: 18,
     fontWeight: '600',
   },
   nextButton: {

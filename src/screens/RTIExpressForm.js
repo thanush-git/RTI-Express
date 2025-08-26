@@ -108,6 +108,13 @@ const ReporterForm = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Static logo image above the form, update path when provided */}
+      <View style={{ alignItems: 'center', marginBottom: 10 }}>
+        <Image
+          source={require('../Assets/RTI Express 1.png')}
+          style={{ width: 277, height: 180, resizeMode: 'contain' }}
+        />
+      </View>
       <Text style={styles.heading}>Reporter Form</Text>
 
       <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
@@ -212,14 +219,12 @@ const ReporterForm = ({ navigation }) => {
       <Text style={styles.label}>Designation (District)*</Text>
       <RNPickerSelect
         onValueChange={(value) => setFormData({ ...formData, designation: value })}
-        placeholder={{ label: 'Select District', value: '' }}
+        placeholder={{ label: 'Select Designation', value: '' }}
         value={formData.designation}
         items={[
-          { label: 'Anantapur', value: 'Anantapur' },
-          { label: 'Kurnool', value: 'Kurnool' },
-          { label: 'Guntur', value: 'Guntur' },
-          { label: 'Kadapa', value: 'Kadapa' },
-          { label: 'Vijayawada', value: 'Vijayawada' },
+          { label: 'Mandal Reporter (1500)', value: 'Mandal Reporter' },
+          { label: 'Constituency Reporter (2000)', value: 'Constituency Reporter' },
+          { label: 'District Incharge (3000)', value: 'District Incharge' },
         ]}
         style={pickerSelectStyles}
         useNativeAndroidPickerStyle={false}

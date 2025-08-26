@@ -107,6 +107,13 @@ const ActivistForm = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Static logo image above the form, update path when provided */}
+      <View style={{ alignItems: 'center', marginBottom: 10 }}>
+        <Image
+          source={require('../Assets/img.png')}
+          style={{ width: 277, height: 180, resizeMode: 'contain' }}
+        />
+      </View>
       <Text style={styles.heading}>Activist Form</Text>
 
       <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
