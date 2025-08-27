@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,8 @@ import { auth } from '../../config.js/firebase'; // Adjust path as needed
 
 const OTPScreen = ({ route, navigation }) => {
   const { phone, verificationId } = route.params;
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const inputRefs = useRef([]);
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
   const [timer, setTimer] = useState(30);
@@ -72,7 +73,8 @@ const OTPScreen = ({ route, navigation }) => {
   };
 
   const handleVerifyOTP = async () => {
-    if (otp.length !== 6) {
+    const otpValue = otp.join('');
+    if (otpValue.length !== 6) {
       Alert.alert('Invalid OTP', 'Please enter a 6-digit OTP.');
       return;
     }
@@ -81,7 +83,7 @@ const OTPScreen = ({ route, navigation }) => {
 
     try {
       // Create credential with verification code
-      const credential = PhoneAuthProvider.credential(verificationId, otp);
+      const credential = PhoneAuthProvider.credential(verificationId, otpValue);
 
       // Sign in with credential
       const userCredential = await signInWithCredential(auth, credential);
@@ -169,19 +171,54 @@ const OTPScreen = ({ route, navigation }) => {
         </Text>
 
         <Text style={styles.label}>OTP Code*</Text>
-        <TextInput
-          placeholder="Enter 6-digit OTP"
-          keyboardType="number-pad"
-          value={otp}
-          onChangeText={setOtp}
-          maxLength={6}
-          style={styles.input}
-          editable={!loading}
-          autoFocus
-        />
+        <View style={styles.otpRow}>
+          {otp.map((digit, idx) => (
+            <TextInput
+              key={idx}
+              ref={ref => inputRefs.current[idx] = ref}
+              style={[styles.input, styles.otpInput]}
+              keyboardType="number-pad"
+              maxLength={1}
+              value={digit}
+              editable={!loading}
+              autoFocus={idx === 0}
+              onChangeText={value => {
+                if (/^\d?$/.test(value)) {
+                  const newOtp = [...otp];
+                  newOtp[idx] = value;
+                  setOtp(newOtp);
+                  if (value && idx < 5) {
+                    inputRefs.current[idx + 1]?.focus();
+                  }
+                  if (!value && idx > 0) {
+                    inputRefs.current[idx - 1]?.focus();
+                  }
+                }
+              }}
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === 'Backspace' && !otp[idx] && idx > 0) {
+                  inputRefs.current[idx - 1]?.focus();
+                }
+              }}
+            />
+          ))}
+        </View>
+  {/* otpRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  otpInput: {
+    width: 40,
+    height: 50,
+    fontSize: 24,
+    textAlign: 'center',
+    marginHorizontal: 3,
+    letterSpacing: 0,
+  }, */}
 
         <View style={styles.resendContainer}>
-          <Text style={styles.resendText}>Didn't receive the code? </Text>
+          <Text style={styles.resendText}>Didn&apos;t receive the code? </Text>
           <TouchableOpacity
             onPress={handleResendOTP}
             disabled={timer > 0 || resending}
@@ -249,6 +286,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     letterSpacing: 3,
   },
+  // ...existing code...
   resendContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -281,4 +319,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  otpRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  otpInput: {
+    width: 40,
+    height: 50,
+    fontSize: 24,
+    textAlign: 'center',
+    marginHorizontal: 3,
+    letterSpacing: 0,
+  },
+
 });

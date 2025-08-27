@@ -5,7 +5,8 @@ import CountryFlag from "react-native-country-flag";
 const languages = [
   { id: 1, name: 'Telugu', code: 'IN' },
   { id: 2, name: 'Hindi', code: 'IN' },
-  { id: 3, name: 'English', code: 'US' }
+  { id: 3, name: 'English', code: 'US' },
+  { id: 4, name: 'Kannada', code: 'IN' }
 ];
 
 const LanguageSelector = ({ navigation }) => {

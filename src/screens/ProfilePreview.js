@@ -36,7 +36,6 @@ export default function ProfilePreview({ route }) {
   const [activeTab, setActiveTab] = useState('Pending');
   const [hasPendingContent, setHasPendingContent] = useState(false);
   const [hasApprovedContent, setHasApprovedContent] = useState(false);
-  const [hasSubmittedContent, setHasSubmittedContent] = useState(false);
 
   const fetchProfile = async () => {
     try {
@@ -91,9 +90,8 @@ export default function ProfilePreview({ route }) {
 
   useEffect(() => {
     // Check if tabs have content
-  setHasPendingContent(userPosts && userPosts.length > 0);
-  setHasApprovedContent(recentNews && recentNews.length > 0);
-  setHasSubmittedContent(userPosts && userPosts.length > 0); // Placeholder, update with actual submitted logic if needed
+    setHasPendingContent(userPosts && userPosts.length > 0);
+    setHasApprovedContent(recentNews && recentNews.length > 0);
   }, [userPosts]);
 
   const myPosts = userPosts || [];
@@ -204,19 +202,11 @@ export default function ProfilePreview({ route }) {
       
       <View style={styles.tabRow}>
         <TouchableOpacity 
-          style={[styles.tabButton, activeTab === 'Pending' && styles.tabButtonActive]}
-          onPress={() => handleTabPress('Pending')}
-        >
-          <Text style={[styles.tabText, activeTab === 'Pending' && styles.tabTextActive]}>
-            Pending {hasPendingContent ? `(${myPosts.length})` : ''}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
           style={[styles.tabButton, activeTab === 'Submitted' && styles.tabButtonActive]}
           onPress={() => handleTabPress('Submitted')}
         >
           <Text style={[styles.tabText, activeTab === 'Submitted' && styles.tabTextActive]}>
-            Submitted {hasSubmittedContent ? `(${myPosts.length})` : ''}
+            Submitted {hasPendingContent ? `(${myPosts.length})` : ''}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity 
@@ -227,7 +217,25 @@ export default function ProfilePreview({ route }) {
             Approved {hasApprovedContent ? `(${recentNews.length})` : ''}
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.tabButton, activeTab === 'Rejected' && styles.tabButtonActive]}
+          onPress={() => handleTabPress('Rejected')}
+        >
+          <Text style={[styles.tabText, activeTab === 'Rejected' && styles.tabTextActive]}>
+            Rejected
+          </Text>
+        </TouchableOpacity>
       </View>
+
+      {activeTab === 'Submitted' && (
+        <FlatList
+          data={[...myPosts].reverse()}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          ListEmptyComponent={renderEmptyState}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
 
       {activeTab === 'Approved' && (
         <FlatList
@@ -239,19 +247,9 @@ export default function ProfilePreview({ route }) {
         />
       )}
 
-      {activeTab === 'Pending' && (
+      {activeTab === 'Rejected' && (
         <FlatList
-          data={[...myPosts].reverse()}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          ListEmptyComponent={renderEmptyState}
-          contentContainerStyle={styles.listContainer}
-        />
-      )}
-
-      {activeTab === 'Submitted' && (
-        <FlatList
-          data={[...myPosts].reverse()} // Replace with actual submitted data if available
+          data={[]} // add real rejected data here later
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
           ListEmptyComponent={renderEmptyState}

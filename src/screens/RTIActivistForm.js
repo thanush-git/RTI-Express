@@ -215,23 +215,6 @@ const ActivistForm = ({ navigation }) => {
       />
       {errors.aadhar && <Text style={styles.error}>{errors.aadhar}</Text>}
 
-      <Text style={styles.label}>Designation (District)*</Text>
-      <RNPickerSelect
-        onValueChange={(value) => setFormData({ ...formData, designation: value })}
-        placeholder={{ label: 'Select District', value: '' }}
-        value={formData.designation}
-        items={[
-          { label: 'Anantapur', value: 'Anantapur' },
-          { label: 'Kurnool', value: 'Kurnool' },
-          { label: 'Guntur', value: 'Guntur' },
-          { label: 'Kadapa', value: 'Kadapa' },
-          { label: 'Vijayawada', value: 'Vijayawada' },
-        ]}
-        style={pickerSelectStyles}
-        useNativeAndroidPickerStyle={false}
-        Icon={() => <Ionicons name="chevron-down" size={20} color="gray" />}
-      />
-      {errors.designation && <Text style={styles.error}>{errors.designation}</Text>}
 
       <Text style={styles.label}>Pincode*</Text>
         <TextInput

@@ -216,7 +216,7 @@ const ReporterForm = ({ navigation }) => {
       />
       {errors.aadhar && <Text style={styles.error}>{errors.aadhar}</Text>}
 
-      <Text style={styles.label}>Designation (District)*</Text>
+      <Text style={styles.label}>Designation</Text>
       <RNPickerSelect
         onValueChange={(value) => setFormData({ ...formData, designation: value })}
         placeholder={{ label: 'Select Designation', value: '' }}
@@ -231,6 +231,23 @@ const ReporterForm = ({ navigation }) => {
         Icon={() => <Ionicons name="chevron-down" size={20} color="gray" />}
       />
       {errors.designation && <Text style={styles.error}>{errors.designation}</Text>}
+      <Text style={styles.label}>District*</Text>
+      <RNPickerSelect
+        onValueChange={(value) => setFormData({ ...formData, district: value })}
+        placeholder={{ label: 'Select District', value: '' }}
+        value={formData.district}
+        items={[
+          { label: 'Anantapur', value: 'Anantapur' },
+          { label: 'Kurnool', value: 'Kurnool' },
+          { label: 'Guntur', value: 'Guntur' },
+          { label: 'Kadapa', value: 'Kadapa' },
+          { label: 'Vijayawada', value: 'Vijayawada' },
+        ]}
+        style={pickerSelectStyles}
+        useNativeAndroidPickerStyle={false}
+        Icon={() => <Ionicons name="chevron-down" size={20} color="gray" />}
+      />
+      {errors.district && <Text style={styles.error}>{errors.district}</Text>}
 
       <Text style={styles.label}>Pincode*</Text>
         <TextInput
@@ -257,10 +274,10 @@ const ReporterForm = ({ navigation }) => {
         <Text style={styles.submitButtonText}>JOIN AS REPORTER</Text>
       </TouchableOpacity>
 
-      {/* Button 2: Direct navigation to PublishNewsScreen (no validation or form submission)
+      {/* {/* Button 2: Direct navigation to PublishNewsScreen (no validation or form submission)
       <TouchableOpacity style={styles.bottomButton} onPress={() => navigation.navigate('PublishNewsScreen')}>
         {/* <Text style={styles.bottomButtonText}>Join as Reporter</Text> */}
-      {/* </TouchableOpacity> */} 
+      {/* </TouchableOpacity> */}  
 
       <View style={{ marginTop: 20, alignItems: 'center' }}>
         <Text>Already registered?</Text>
